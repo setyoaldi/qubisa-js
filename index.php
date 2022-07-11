@@ -1,19 +1,35 @@
 <!Doctype html>
 <html>
-    <head>
-        <title>Tim 4</title>
-        <style>
-        table, th, td {
-            border:1px solid black;
-          }
-        </style>
-        <link rel="stylesheet" href="style.css">
-    </head>
-	<body>
-        <form action="index.php" method="post" align="center">
-            <input type="submit" name="fetch" value="FETCH DATA" />
-        </form>
-        <?php
+
+<head>
+    <title>Tim 4</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-light mb-5">
+        <div class="container container-fluid">
+            <a class="navbar-brand" href="#">Kelompok 4</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="pegawai.php">Pilih Pegawai</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <form action="index.php" method="post" align="center">
+        <input type="submit" name="fetch" value="FETCH DATA" class="btn btn-primary" />
+    </form>
+    <?php
         //fetch connection details from database.php file using require_once(); function
         require_once ('database.php');
         //check if it work!
@@ -22,9 +38,11 @@
         {
             //mysql_query() performs a single query to the currently active database on the server that is associated with the specified link identifier
             $response = mysqli_query($connect, 'SELECT * FROM karyawan');
-            echo "<table border='2' align='center'>
-            <H2 align='center'> Tabel Karyawan </h2>
-            <tr>
+            echo "<div class='container'>
+			<table class='table table-bordered '>
+            <H2 align='center' class='mb-5 mt-5'> Tabel Pegawai</h2>
+			<thead class='table-dark'>
+			<tr>
             <th>Id</th>
             <th>Nama</th>
             <th>Alamat</th>
@@ -33,7 +51,10 @@
             <th>Cuti</th>
 			<th>Absen</th>
 			<th>Sakit</th>
-            </tr>";
+            </tr>
+			</thead>
+			<tbody class='table-group-divider'>
+			";
             while ($fetch = mysqli_fetch_array($response))
             {
                 echo "<tr>";
@@ -47,85 +68,17 @@
 				echo "<td>" . $fetch['sakit'] . "</td>";
                 echo "</tr>";
             }
-            echo "</table>";
+            echo "</tbody></table></div>";
 
             mysqli_close($connect);
         }
         ?>
-        <br><br><br><br><br><br><br>
-        <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET" align="center">
-			<p>Pilih Pegawai:</p>
-			<select name="nama" style="width:150px;">
-               <?php
-				include "database.php";
-				//query menampilkan nip pegawai ke dalam combobox
-				$query	=mysqli_query($connect, "SELECT * FROM karyawan ORDER BY id");
-				while ($data = mysqli_fetch_array($query)) {
-				?>
-				<option value="<?=$data['nama'];?>"><?php echo $data['nama'];?></option>
-				<?php
-				}
-				?>
-            </select>
-			<input type="submit" value="Pilih">
-			<a href="./index.php">Refresh</a>
-		</form>
-		<h4 align="center">Data Pegawai</h4>
-		<?php
-		if (isset($_GET['nama'])) {
-			$id_peg=$_GET['nama'];
+    <br><br><br><br><br><br><br>
 
-			//menampilkan data pegawai berdasarkan pilihan combobox ke dalam form
-			$tamPeg=mysqli_query($connect, "SELECT * FROM karyawan WHERE nama='$id_peg'");
-			$tpeg = mysqli_fetch_array($tamPeg);
-		
-		?>
-		<form action="update.php" method="POST" >
-		<table border="0" cellpadding="2" align="center">
-			<tr>
-				<td width="100">Id</td>
-				<td width="280">: <input type="text" name="id" value="<?php echo $tpeg['id']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Nama</td>
-				<td>: <input type="text" name="nama" value="<?php echo $tpeg['nama']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Alamat</td>
-				<td>: <input type="text" name="alamat" value="<?php echo $tpeg['alamat']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Jabatan</td>
-				<td>: <input type="text" name="jabatan" value="<?php echo $tpeg['jabatan']; ?>" /></td>
-			</tr>
-			<tr>
-				<td id="gaji">Gaji per Bulan</td>
-				<td>: <input type="text" name="gaji" value="<?php echo $tpeg['gaji']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Cuti</td>
-				<td>: <input type="text" name="cuti" value="<?php echo $tpeg['cuti']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Absen</td>
-				<td>: <input type="text" name="absen" value="<?php echo $tpeg['absen']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Sakit</td>
-				<td>: <input type="text" name="sakit" value="<?php echo $tpeg['sakit']; ?>" /></td>
-			</tr>
-			<tr>
-				<td> Aksi</td>
-				<td>&nbsp; <input type="submit" value="Simpan Perubahan"><input type="submit" value="Hitung Gaji"><input type="submit" value="Hitung PPH21"></td>
-			</tr>
-		</table>
-		</form>
-		<?php
-		}
-		?>
-        <div id="hasilpilih"></div>
-		<script>
+    <div id="hasilpilih"></div>
+    <script>
 
-		</script>
-    </body>
+    </script>
+</body>
+
 </html>
