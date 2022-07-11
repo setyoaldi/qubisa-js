@@ -9,6 +9,7 @@
         </style>
         <link rel="stylesheet" href="style.css">
     </head>
+	<body>
         <form action="index.php" method="post" align="center">
             <input type="submit" name="fetch" value="FETCH DATA" />
         </form>
@@ -29,7 +30,9 @@
             <th>Alamat</th>
             <th>Jabatan</th>
             <th>Gaji per Bulan</th>
-            <th>Jumlah Hari Kerja</th>
+            <th>Cuti</th>
+			<th>Absen</th>
+			<th>Sakit</th>
             </tr>";
             while ($fetch = mysqli_fetch_array($response))
             {
@@ -39,7 +42,9 @@
                 echo "<td>" . $fetch['alamat'] . "</td>";
                 echo "<td>" . $fetch['jabatan'] . "</td>";
                 echo "<td>" . $fetch['gaji'] . "</td>";
-                echo "<td>" . $fetch['jhk'] . "</td>";
+                echo "<td>" . $fetch['cuti'] . "</td>";
+				echo "<td>" . $fetch['absen'] . "</td>";
+				echo "<td>" . $fetch['sakit'] . "</td>";
                 echo "</tr>";
             }
             echo "</table>";
@@ -48,16 +53,16 @@
         }
         ?>
         <br><br><br><br><br><br><br>
-        <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET">
+        <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET" align="center">
 			<p>Pilih Pegawai:</p>
-			<select name="id" style="width:100px;">
+			<select name="nama" style="width:150px;">
                <?php
 				include "database.php";
 				//query menampilkan nip pegawai ke dalam combobox
 				$query	=mysqli_query($connect, "SELECT * FROM karyawan ORDER BY id");
 				while ($data = mysqli_fetch_array($query)) {
 				?>
-				<option value="<?=$data['id'];?>"><?php echo $data['id'];?></option>
+				<option value="<?=$data['nama'];?>"><?php echo $data['nama'];?></option>
 				<?php
 				}
 				?>
@@ -65,18 +70,18 @@
 			<input type="submit" value="Pilih">
 			<a href="./index.php">Refresh</a>
 		</form>
-		<h4>Data Pegawai</h4>
+		<h4 align="center">Data Pegawai</h4>
 		<?php
-		if (isset($_GET['id'])) {
-			$id_peg=$_GET['id'];
+		if (isset($_GET['nama'])) {
+			$id_peg=$_GET['nama'];
 
 			//menampilkan data pegawai berdasarkan pilihan combobox ke dalam form
-			$tamPeg=mysqli_query($connect, "SELECT * FROM karyawan WHERE id='$id_peg'");
+			$tamPeg=mysqli_query($connect, "SELECT * FROM karyawan WHERE nama='$id_peg'");
 			$tpeg = mysqli_fetch_array($tamPeg);
 		
 		?>
-		<form action="update.php" method="POST">
-		<table border="0" cellpadding="2">
+		<form action="update.php" method="POST" >
+		<table border="0" cellpadding="2" align="center">
 			<tr>
 				<td width="100">Id</td>
 				<td width="280">: <input type="text" name="id" value="<?php echo $tpeg['id']; ?>" /></td>
@@ -94,16 +99,24 @@
 				<td>: <input type="text" name="jabatan" value="<?php echo $tpeg['jabatan']; ?>" /></td>
 			</tr>
 			<tr>
-				<td>Gaji per Bulan</td>
+				<td id="gaji">Gaji per Bulan</td>
 				<td>: <input type="text" name="gaji" value="<?php echo $tpeg['gaji']; ?>" /></td>
 			</tr>
 			<tr>
-				<td>Jumlah Harian Kerja</td>
-				<td>: <input type="text" name="jhk" value="<?php echo $tpeg['jhk']; ?>" /></td>
+				<td>Cuti</td>
+				<td>: <input type="text" name="cuti" value="<?php echo $tpeg['cuti']; ?>" /></td>
 			</tr>
 			<tr>
-				<td></td>
-				<td>&nbsp; <input type="submit" value="Save"></td>
+				<td>Absen</td>
+				<td>: <input type="text" name="absen" value="<?php echo $tpeg['absen']; ?>" /></td>
+			</tr>
+			<tr>
+				<td>Sakit</td>
+				<td>: <input type="text" name="sakit" value="<?php echo $tpeg['sakit']; ?>" /></td>
+			</tr>
+			<tr>
+				<td> Aksi</td>
+				<td>&nbsp; <input type="submit" value="Simpan Perubahan"><input type="submit" value="Hitung Gaji"><input type="submit" value="Hitung PPH21"></td>
 			</tr>
 		</table>
 		</form>
@@ -111,6 +124,8 @@
 		}
 		?>
         <div id="hasilpilih"></div>
+		<script>
 
+		</script>
     </body>
 </html>
