@@ -116,7 +116,7 @@
 			</tr>
 			<tr>
 				<td> Aksi</td>
-				<td>&nbsp; <input type="submit" value="Simpan Perubahan"><input type="submit" value="Hitung Gaji"><input type="submit" value="Hitung PPH21"></td>
+				<td>&nbsp; <input type="submit" value="Simpan Perubahan"><input type="button" value="Hitung Gaji"><input type="button" value="Hitung PPH21"></td>
 			</tr>
 		</table>
 		</form>
