@@ -20,14 +20,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="pegawai.php">Pilih Pegawai</a>
+                        <a class="nav-link active" aria-current="page" href="pegawai.php">Hitung Gaji & PPH21</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
     <form action="index.php" method="post" align="center">
-        <input type="submit" name="fetch" value="FETCH DATA" class="btn btn-primary" />
+        <input type="submit" name="fetch" value="Tampil Data" class="btn btn-primary" />
     </form>
     <?php
         //fetch connection details from database.php file using require_once(); function
@@ -74,8 +74,6 @@
         }
         ?>
     <br><br><br><br><br><br><br>
-
-    <div id="hasilpilih"></div>
     <script>
 
     </script>

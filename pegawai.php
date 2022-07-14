@@ -91,8 +91,8 @@
                             value="<?php echo $tpeg['jabatan']; ?>" /></td>
                 </tr>
                 <tr>
-                    <td id="gaji"><label for="" class="col-form-label">Gaji perbulan</label></td>
-                    <td><input class="form-control" type="text" name="gaji" value="<?php echo $tpeg['gaji']; ?>" /></td>
+                    <td><label for="" class="col-form-label">Gaji perbulan</label></td>
+                    <td><input class="form-control" type="text"  id="gaji1" name="gaji" value="<?php echo $tpeg['gaji']; ?>" /></td>
                 </tr>
                 <tr>
                     <td><label for="" class="col-form-label">Cuti</label></td>
@@ -100,7 +100,7 @@
                 </tr>
                 <tr>
                     <td><label for="" class="col-form-label">Absen</label></td>
-                    <td><input class="form-control" type="text" name="absen" value="<?php echo $tpeg['absen']; ?>" />
+                    <td><input class="form-control" type="text" id="absen1" name="absen" value="<?php echo $tpeg['absen']; ?>" />
                     </td>
                 </tr>
                 <tr>
@@ -111,11 +111,45 @@
                 <tr>
                     <td><label for="" class="col-form-label">Aksi</label></td>
                     <td>
-                        <button type="submit" class="btn btn-success mx-2">Simpan Perubahan</button>
-                        <button type="submit" class="btn btn-danger mx-2">Hitung Gaji</button>
-                        <button type="submit" class="btn btn-warning text-white mx-2">Hitung pph21</button>
-
+                        <button type="submit" class="btn btn-success mx-2" id="simpan">Simpan Perubahan</button>
+                        <button type="button" class="btn btn-danger mx-2" id="gaji" onclick="gajiku()">Hitung Gaji</button>
+                        <button type="button" class="btn btn-warning text-white mx-2" id="pph21" onclick="pph21f()">Hitung pph21</button>
                     </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="container">
+        <H2 class="mt-5 ">Perhitungan Gaji(Dikurangi Absen)</H2>
+        <form class="form">
+            <table class="table">
+                <tr>
+                    <td><label for="" class="col-form-label">Jumlah Absen :</label></td>
+                    <td><label for="" class="col-form-label" id="jmlAbsen"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="" class="col-form-label">Gaji</label></td>
+                    <td><label for="" class="col-form-label" id="jmlGaji"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="" class="col-form-label">Gaji(Dikurangi Absen)</label></td>
+                    <td><label for="" class="col-form-label" id="jmlGajiAbsen"></label></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="container">
+        <H2 class="mt-5 ">Perhitungan PPH21</H2>
+        <form action="update.php" method="POST" class="form">
+            <table class="table">
+                <tr>
+                    <td><label for="" class="col-form-label">Pajak PPH21 Perbulan</label></td>
+                    <td><label for="" class="col-form-label" id="pph21bulan"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="" class="col-form-label">Pajak PPH21 Pertahun</label></td>
+                    <td><label for="" class="col-form-label" id="pph21tahun"></label></td>
                 </tr>
             </table>
         </form>
@@ -123,6 +157,144 @@
     <?php
 		}
 		?>
+
+<script type="text/javascript">
+        function gajiku(){
+            var absen = document.getElementById("absen1").value;
+            var gaji = document.getElementById("gaji1").value;
+            var gajiabsen = ((20 - absen) / 20) * gaji;
+            document.getElementById("jmlAbsen").innerHTML=absen;
+            document.getElementById("jmlGaji").innerHTML=gaji;
+            document.getElementById("jmlGajiAbsen").innerHTML=gajiabsen;
+        }
+        function pph21f(){
+            var gajisetahun = document.getElementById("gaji1").value * 12;
+            const ptkp = 54000000;
+            const pkp5 = 60000000;
+            const pkp10 = 100000000;
+            const pkp15 = 200000000;
+            const pkp20 = 500000000;
+            function pajak5(){
+                if(gajisetahun > pkp5){
+                    return Math.abs((ptkp - pkp5) * 5 / 100);
+                }
+                return Math.abs((gajisetahun - ptkp) * 5 / 100);
+            }
+            function pajak10(){
+                if(gajisetahun > pkp10){
+                    return Math.abs((pkp5 - pkp10) * 10 / 100);
+                }
+                return Math.abs((gajisetahun - pkp10) * 10 / 100);
+            }
+            function pajak15(){
+                if(gajisetahun > pkp15){
+                    return Math.abs((pkp10 - pkp15) * 15 / 100);
+                }
+                return Math.abs((gajisetahun - pkp15) * 15 / 100);
+            }
+            function pajak20(){
+                if(gajisetahun > pkp20){
+                    return Math.abs((pkp15 - pkp20) * 20 / 100);
+                }
+                return Math.abs((gajisetahun - pkp20) * 20 / 100);
+            }
+            function pajak25(){
+                return Math.abs((gajisetahun - pkp20) * 25 / 100);
+            }
+            let pajak = 0;
+                if(gajisetahun > ptkp){
+                    Math.abs(pajak += pajak5(gajisetahun));
+                    if(gajisetahun > pkp5){
+                        Math.abs(pajak += pajak10(gajisetahun));
+                        if(gajisetahun > pkp10){
+                            Math.abs(pajak += pajak15(gajisetahun));
+                            if(gajisetahun > pkp15){
+                                Math.abs(pajak += pajak20(gajisetahun));
+                                if(gajisetahun > pkp20){
+                                    Math.abs(pajak += pajak25(gajisetahun));
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    alert("Penghasilan anda tidak kena pajak");
+                }
+                document.getElementById("pph21tahun").innerHTML = pajak;
+                document.getElementById("pph21bulan").innerHTML = pajak/12;
+            // var pernikahan = document.getElementById("status").value;
+            // var tanggungan = document.getElementById("jt").value;
+            // var ptkp;
+            // if(pernikahan == "Ya"){
+            //     if(tanggungan == 0){
+            //         document.getElementById("ptkpid").innerHTML="58500000";
+            //         return ptkp = 58500000;
+            //     }else if(tanggungan == 1){
+            //         document.getElementById("ptkpid").innerHTML="63000000";
+            //         return ptkp = 63000000;
+            //     }else if(tanggungan == 2){
+            //         document.getElementById("ptkpid").innerHTML="67500000";
+            //         return ptkp = 67500000;
+            //     }else{
+            //         document.getElementById("ptkpid").innerHTML="72000000";
+            //         return ptkp = 72000000;
+            //     }
+            // }else{
+            //     if(tanggungan == 0){
+            //         document.getElementById("ptkpid").innerHTML="54000000";
+            //         return ptkp = 54000000;
+            //     }else if(tanggungan == 1){
+            //         document.getElementById("ptkpid").innerHTML="58500000";
+            //         return ptkp = 58500000;
+            //     }else if(tanggungan == 2){
+            //         document.getElementById("ptkpid").innerHTML="63000000";
+            //         return ptkp = 63000000;
+            //     }else{
+            //         document.getElementById("ptkpid").innerHTML="67500000";
+            //         return ptkp = 67500000;
+            //     }
+            // }
+            // var ptkp = document.getElementById("ptkpid").value;
+            // var pkp = gajisetahun - ptkp;
+            // document.getElementById("pkpid").innerHTML=pkp;
+                    
+            // if(pkp <= 50000000){
+            //     pajak = 0.05 * 50000000;
+            //     pph21a = pajak / 12;
+            //     document.getElementById("pph21tahun").innerHTML=Math.abs(pajak);
+            //     document.getElementById("pph21bulan").innerHTML=Math.abs(pph21a);
+            // }else if(pkp > 50000000){
+            //     pkp2 = pkp - 50000000;
+            //     pajak1 = 0.05 * 50000000;
+            //     pajak2 = 0.15 * pkp2;
+            //     pph21b = (pajak1+pajak2)/12;
+            //     document.getElementById("pph21tahun").innerHTML=Math.abs(pph21b*12);
+            //     document.getElementById("pph21bulan").innerHTML=Math.abs(pph21b);
+            // }
+            // else if(pkp > 250000000){
+            //     pkp3 = pkp - 50000000;
+            //     pkp4 = pkp3 - 250000000;
+            //     pajak3 = 0.05*50000000;
+            //     pajak4 = 0.15*pkp3;
+            //     pajak5 = 0.25*pkp4;
+            //     pph21c = (pajak3+pajak4+pajak5)/12;
+            //     document.getElementById("pph21tahun").innerHTML=Math.abs(pph21c*12);
+            //     document.getElementById("pph21bulan").innerHTML=Math.abs(pph21c);
+            // }
+            // else if(pkp > 500000000){
+            //     pkp5 = pkp - 50000000;
+            //     pkp6 = pkp5 - 250000000;
+            //     pkp7 = pkp6 - 500000000
+            //     pajak6 = 0.05*50000000;
+            //     pajak7 = 0.15*pkp5;
+            //     pajak8 = 0.25*pkp6;
+            //     pajak9 = 0.30*pkp7;
+            //     pph21d = (pajak6+pajak7+pajak8+pajak9)/12;
+            //     document.getElementById("pph21tahun").innerHTML=Math.abs(pph21d*12);
+            //     document.getElementById("pph21bulan").innerHTML=Math.abs(pph21d);
+            // }
+        }
+    
+</script>
 </body>
 
 </html>
