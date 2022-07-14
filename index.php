@@ -27,7 +27,7 @@
         </div>
     </nav>
     <form action="index.php" method="post" align="center">
-        <input type="submit" name="fetch" value="Tampil Data" class="btn btn-primary" />
+        <input type="submit" id="fe" name="fetch" value="Tampil Data" class="btn btn-primary" />
     </form>
     <?php
         //fetch connection details from database.php file using require_once(); function
@@ -38,7 +38,7 @@
         {
             //mysql_query() performs a single query to the currently active database on the server that is associated with the specified link identifier
             $response = mysqli_query($connect, 'SELECT * FROM karyawan');
-            echo "<div class='container'>
+            echo "<div class='container' id='fet'>
 			<table class='table table-bordered '>
             <H2 align='center' class='mb-5 mt-5'> Tabel Pegawai</h2>
 			<thead class='table-dark'>
@@ -74,9 +74,6 @@
         }
         ?>
     <br><br><br><br><br><br><br>
-    <script>
-
-    </script>
 </body>
 
 </html>
